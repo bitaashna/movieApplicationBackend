@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,6 +41,9 @@ public class Movie {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
     private List<Wishlist> wishListList;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
 
 
 }

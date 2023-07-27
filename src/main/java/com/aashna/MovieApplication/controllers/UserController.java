@@ -36,17 +36,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user2);
     }
 
-//    @PostMapping("/users/{userId}/wishlist/{movieId}")
-//    public ResponseEntity<String> addMovieToWishlist(@PathVariable Integer userId, @PathVariable Integer movieId) {
-//        userService.addMovieToWishlist(userId, movieId);
-//        return ResponseEntity.ok("Movie added to wishlist successfully.");
-//    }
-
-//    @GetMapping("/users/{userId}/wishlist")
-//    public ResponseEntity<List<Movie>> getWishlistMoviesByUserId(@PathVariable Integer userId) {
-//        List<Movie> wishlistMovies = userService.getWishlistMovies(userId);
-//        return ResponseEntity.ok(wishlistMovies);
-//    }
     public MovieDto movieToDto(Movie movie) {
 
         MovieDto movieDto = this.modelMapper.map(movie, MovieDto.class);

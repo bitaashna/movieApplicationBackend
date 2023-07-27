@@ -10,6 +10,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +35,8 @@ public class MovieDto implements Serializable {
     private String featuredYear;
 
     private String imdb;
+
+    private Set<ReviewDto> reviews = new HashSet<>();
 
     public MovieDto(Movie movie) {
         this.setMovieId(movie.getMovieId());
