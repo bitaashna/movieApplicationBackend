@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
@@ -44,6 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = this.modelMapper.map(reviewDto, Review.class);
         review.setMovie(movie);
+        review.setAddedDate(new Date());
 
         // Establish the relationship between User and Review
         user.getReviews().add(review);

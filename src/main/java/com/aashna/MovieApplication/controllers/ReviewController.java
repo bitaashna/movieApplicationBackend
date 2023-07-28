@@ -35,6 +35,7 @@ public class ReviewController {
 
         reviewDto.setFirstName(firstName);
         reviewDto.setLastName(lastName);
+        reviewDto.setRating(reviewDto.getRating());
 
         ReviewDto createdReview = this.reviewService.createReview(reviewDto, movieId, userId);
 

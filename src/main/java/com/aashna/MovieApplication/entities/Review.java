@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -15,8 +16,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String content;
+    private Integer rating;
     @ManyToOne
     private Movie movie;
+
+    private Date addedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
