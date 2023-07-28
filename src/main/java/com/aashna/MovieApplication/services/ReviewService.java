@@ -7,6 +7,4 @@ public interface ReviewService {
 
     ReviewDto createReview(ReviewDto reviewDto, Integer movieId, Integer userId);
 
-    void deleteReview(Integer reviewId);
-
 }

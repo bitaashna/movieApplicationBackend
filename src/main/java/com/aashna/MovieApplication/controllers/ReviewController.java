@@ -1,7 +1,6 @@
 package com.aashna.MovieApplication.controllers;
 
 import com.aashna.MovieApplication.entities.User;
-import com.aashna.MovieApplication.payloads.ApiResponse;
 import com.aashna.MovieApplication.payloads.ReviewDto;
 import com.aashna.MovieApplication.repositories.UserRepo;
 import com.aashna.MovieApplication.services.ReviewService;
@@ -42,12 +41,6 @@ public class ReviewController {
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer reviewId) {
-        this.reviewService.deleteReview(reviewId);
-        return new ResponseEntity<ApiResponse>(new ApiResponse("Review Deleted", true), HttpStatus.OK);
-
-    }
     private String[] getUserNamesById(Integer userId) {
         Optional<User> userOptional = userRepo.findById(userId);
         if (userOptional.isPresent()) {

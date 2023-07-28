@@ -57,14 +57,5 @@ public class ReviewServiceImpl implements ReviewService {
         return this.modelMapper.map(savedReview, ReviewDto.class);
     }
 
-    @Override
-    public void deleteReview(Integer reviewId) {
-
-        Review rev = this.reviewRepo.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment", "Review id", reviewId));
-
-        this.reviewRepo.delete(rev);
-
-    }
 
 }
