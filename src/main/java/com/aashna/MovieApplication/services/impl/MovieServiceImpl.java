@@ -51,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDto getMovieById(Integer movieId) {
 
         Movie movie = this.movieRepo.findById(movieId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", movieId));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", movieId));
 
         return this.modelMapper.map(movie, MovieDto.class);
     }

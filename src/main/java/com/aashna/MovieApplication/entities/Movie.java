@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.sql.Time;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,8 @@ public class Movie {
     @Column(length = 100)
     private String title;
 
-    private String poster;
+    @Lob
+    private Blob poster;
     private Time duration;
     private String description;
     private String featuredYear;

@@ -9,7 +9,10 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.sql.Time;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +29,7 @@ public class MovieDto implements Serializable {
     @Size(min = 3, message = "Movie Name must be of 3 characters!!")
     private String title;
 
-    private String poster;
+    private String posterBase64;
 
     private Time duration;
 
@@ -45,7 +48,25 @@ public class MovieDto implements Serializable {
         this.setDuration(movie.getDuration());
         this.setDescription(movie.getDescription());
         this.setFeaturedYear(movie.getFeaturedYear());
-        this.setPoster(movie.getPoster());
+        // Convert the poster Blob data to Base64 and set it in the posterBase64 field
+        if (movie.getPoster() != null) {
+            Blob posterBlob = movie.getPoster();
+            int blobLength = 0;
+            try {
+                blobLength = (int) posterBlob.length();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            byte[] posterBytes = new byte[0];
+            try {
+                posterBytes = posterBlob.getBytes(1, blobLength);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            this.posterBase64 = Base64.getEncoder().encodeToString(posterBytes);
+
+        }
+
 
     }
 }
