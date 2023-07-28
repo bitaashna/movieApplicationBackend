@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,7 +20,8 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String img;
+    @Lob
+    private Blob img;
     private Date dateOfBirth;
     private String gender;
 
