@@ -10,6 +10,7 @@ import com.aashna.MovieApplication.payloads.MovieDto;
 import com.aashna.MovieApplication.payloads.ReviewDto;
 import com.aashna.MovieApplication.repositories.MovieRepo;
 import com.aashna.MovieApplication.repositories.UserRepo;
+import com.aashna.MovieApplication.repositories.WishlistRepo;
 import com.aashna.MovieApplication.services.WishlistService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class WishlistController {
     @Autowired
     private WishlistService wishListService;
 
+    @Autowired
+    private WishlistRepo wishlistRepo;
     @Autowired
     private UserRepo userRepo;
     @Autowired
@@ -74,9 +77,23 @@ public class WishlistController {
             return new ResponseEntity<>(new ApiResponse("Movie not found", false), HttpStatus.NOT_FOUND);
         }
 
+        // Check if the movie is already in the user's wishlist
+        boolean movieAlreadyInWishlist = wishlistRepo.existsByUserUserIdAndMovieMovieId(userId, movieId);
+
+        if (movieAlreadyInWishlist) {
+            throw new IllegalArgumentException("Movie is already in the user's wishlist.");
+        }
+
         Wishlist wishList = new Wishlist(user, movie);
         wishListService.createWishlist(wishList);
         return new ResponseEntity<>(new ApiResponse("Added to wishlist", true), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> removeFromWishlist(@RequestParam Integer userId,
+                                                          @RequestParam Integer movieId) {
+        wishListService.deleteFromWishlist(userId, movieId);
+        return new ResponseEntity<>(new ApiResponse("Movie removed from wishlist", true), HttpStatus.OK);
     }
 
     public static MovieDto DtoFromMovie(Movie movie) {
