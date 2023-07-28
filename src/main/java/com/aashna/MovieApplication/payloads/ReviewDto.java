@@ -11,6 +11,9 @@ public class ReviewDto implements Serializable {
 
     private Integer id;
     private String content;
+    private String firstName;
+    private String lastName;
+
 
 }
 

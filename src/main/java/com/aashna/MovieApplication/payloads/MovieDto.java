@@ -46,5 +46,6 @@ public class MovieDto implements Serializable {
         this.setDescription(movie.getDescription());
         this.setFeaturedYear(movie.getFeaturedYear());
         this.setPoster(movie.getPoster());
+
     }
 }

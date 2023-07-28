@@ -17,4 +17,11 @@ public class Review {
     private String content;
     @ManyToOne
     private Movie movie;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
+    private User user;
+
+
+
 }

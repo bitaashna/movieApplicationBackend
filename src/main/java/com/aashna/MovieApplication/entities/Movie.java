@@ -42,7 +42,7 @@ public class Movie {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
     private List<Wishlist> wishListList;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Review> reviews = new HashSet<>();
 
 

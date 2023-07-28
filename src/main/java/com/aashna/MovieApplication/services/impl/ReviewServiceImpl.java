@@ -2,10 +2,12 @@ package com.aashna.MovieApplication.services.impl;
 
 import com.aashna.MovieApplication.entities.Movie;
 import com.aashna.MovieApplication.entities.Review;
+import com.aashna.MovieApplication.entities.User;
 import com.aashna.MovieApplication.exceptions.ResourceNotFoundException;
 import com.aashna.MovieApplication.payloads.ReviewDto;
 import com.aashna.MovieApplication.repositories.MovieRepo;
 import com.aashna.MovieApplication.repositories.ReviewRepo;
+import com.aashna.MovieApplication.repositories.UserRepo;
 import com.aashna.MovieApplication.services.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +23,31 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepo reviewRepo;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public ReviewDto createReview(ReviewDto reviewDto, Integer movieId) {
 
+    @Override
+    public ReviewDto createReview(ReviewDto reviewDto, Integer movieId, Integer userId) {
         Movie movie = movieRepo.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "movie id", movieId));
 
+        // Fetch user information from the database based on the provided userId
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "user id", userId));
+
+        // Set the user's first name and last name in the ReviewDto
+        reviewDto.setFirstName(user.getFirstName());
+        reviewDto.setLastName(user.getLastName());
 
         Review review = this.modelMapper.map(reviewDto, Review.class);
-
         review.setMovie(movie);
 
+        // Establish the relationship between User and Review
+        user.getReviews().add(review);
+        review.setUser(user);
 
         Review savedReview = this.reviewRepo.save(review);
 

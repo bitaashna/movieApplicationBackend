@@ -1,14 +1,17 @@
 package com.aashna.MovieApplication.controllers;
 
 import com.aashna.MovieApplication.entities.Movie;
+import com.aashna.MovieApplication.entities.Review;
 import com.aashna.MovieApplication.entities.User;
 import com.aashna.MovieApplication.entities.Wishlist;
 import com.aashna.MovieApplication.exceptions.ResourceNotFoundException;
 import com.aashna.MovieApplication.payloads.ApiResponse;
 import com.aashna.MovieApplication.payloads.MovieDto;
+import com.aashna.MovieApplication.payloads.ReviewDto;
 import com.aashna.MovieApplication.repositories.MovieRepo;
 import com.aashna.MovieApplication.repositories.UserRepo;
 import com.aashna.MovieApplication.services.WishlistService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/wishlist")
@@ -28,6 +33,8 @@ public class WishlistController {
     private UserRepo userRepo;
     @Autowired
     private MovieRepo movieRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @GetMapping("/{userId}")
@@ -35,13 +42,25 @@ public class WishlistController {
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
 
-        List<Wishlist> body = wishListService.readWishList(userId);
-        List<MovieDto> movies = new ArrayList<MovieDto>();
-        for (Wishlist wishlist : body) {
-            movies.add(DtoFromMovie(wishlist.getMovie()));
-        }
+        List<Wishlist> wishlist = wishListService.readWishList(userId);
 
-        return new ResponseEntity<List<MovieDto>>(movies, HttpStatus.OK);
+        List<MovieDto> movies = new ArrayList<>();
+        for (Wishlist wishlistItem : wishlist) {
+            Movie movie = wishlistItem.getMovie();
+            MovieDto movieDto = new MovieDto(movie);
+
+            // Fetch the reviews associated with the movie
+            Set<Review> reviews = movie.getReviews();
+
+            // Map the reviews to ReviewDto objects and set them in the MovieDto
+            Set<ReviewDto> reviewDtos = reviews.stream()
+                    .map(review -> modelMapper.map(review, ReviewDto.class))
+                    .collect(Collectors.toSet());
+
+            movieDto.setReviews(reviewDtos);
+            movies.add(movieDto);
+        }
+        return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
     @PostMapping("/add")
