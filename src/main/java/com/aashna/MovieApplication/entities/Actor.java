@@ -20,6 +20,7 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String bio;
     @Lob
     private Blob img;
     private Date dateOfBirth;

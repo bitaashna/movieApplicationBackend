@@ -20,6 +20,7 @@ public class ActorDto implements Serializable {
     private Integer id;
     private String imgBase64;
     private String name;
+    private String bio;
 
     private Date dateOfBirth;
     private String gender;
