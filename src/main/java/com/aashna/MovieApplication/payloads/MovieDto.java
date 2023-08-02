@@ -36,6 +36,8 @@ public class MovieDto implements Serializable {
 
     private String imdb;
 
+    private String genre;
+
     private Set<ReviewDto> reviews = new HashSet<>();
 
     public MovieDto(Movie movie) {
@@ -45,6 +47,7 @@ public class MovieDto implements Serializable {
         this.setDuration(movie.getDuration());
         this.setDescription(movie.getDescription());
         this.setFeaturedYear(movie.getFeaturedYear());
+        this.setGenre(movie.getGenre());
     }
 
 }

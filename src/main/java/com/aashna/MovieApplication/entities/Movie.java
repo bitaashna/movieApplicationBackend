@@ -32,6 +32,7 @@ public class Movie {
     private String description;
     private String featuredYear;
     private String imdb;
+    private String genre;
 
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
