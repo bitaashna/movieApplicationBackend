@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ActorServiceImpl implements ActorService {
@@ -31,6 +32,32 @@ public class ActorServiceImpl implements ActorService {
     public ActorServiceImpl(ActorRepo actorRepo) {
         this.actorRepo = actorRepo;
     }
+
+    public ActorDto getActorById(Integer actorId) {
+
+        Optional<Actor> actorOptional = actorRepo.findById(actorId);
+        if (actorOptional.isPresent()) {
+            Actor actor = actorOptional.get();
+
+            // Convert the poster Blob data to Base64
+            String imgBase64 = null;
+            if (actor.getImg() != null) {
+                try {
+                    imgBase64 = convertBlobToBase64(actor.getImg());
+                } catch (SQLException e) {
+                    throw new RuntimeException("Failed to convert Blob to Base64.", e);
+                }
+            }
+
+            // Create a new MovieDto object and set the Base64 data
+            ActorDto actorDto = modelMapper.map(actor, ActorDto.class);
+            actorDto.setImgBase64(imgBase64);
+
+            return actorDto;
+        }
+        return null;
+    }
+
 
     @Override
     public List<ActorDto> getAllActorsOfParticularMovie(Integer movieId) {
