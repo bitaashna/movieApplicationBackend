@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class UserSignInDto implements Serializable {
+    private Integer userId;
     private String email;
     private String password;
 }
