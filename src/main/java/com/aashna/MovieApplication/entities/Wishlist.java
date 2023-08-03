@@ -26,6 +26,9 @@ public class Wishlist {
     @JoinColumn(name = "movieId")
     private Movie movie;
 
+    @Lob
+    private String posterBase64;
+
     public Wishlist() {
     }
 

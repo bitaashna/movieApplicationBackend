@@ -18,7 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,10 +64,25 @@ public class WishlistController {
                     .collect(Collectors.toSet());
 
             movieDto.setReviews(reviewDtos);
+            // Convert the poster Blob data to Base64 and set it in the MovieDto
+            if (movie.getPoster() != null) {
+                try {
+                    String posterBase64 = convertBlobToBase64(movie.getPoster());
+                    movieDto.setPosterBase64(posterBase64);
+                } catch (SQLException e) {
+                    throw new RuntimeException("Failed to convert Blob to Base64.", e);
+                }
+            }
             movies.add(movieDto);
         }
+
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
+    private String convertBlobToBase64(Blob blob) throws SQLException {
+        byte[] data = blob.getBytes(1, (int) blob.length());
+        return Base64.getEncoder().encodeToString(data);
+    }
+
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addWishList(@RequestParam("movieId") Integer movieId, @RequestParam("userId") Integer userId) {
